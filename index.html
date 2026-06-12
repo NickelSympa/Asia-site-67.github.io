@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ASIA Site 67 - Wiki RP SCP</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d1117;
+      --panel: #151b23;
+      --panel-2: #1d2530;
+      --text: #edf2f7;
+      --muted: #9aa7b6;
+      --line: #303b49;
+      --accent: #c9a227;
+      --accent-2: #4aa3ff;
+      --danger: #ff5c5c;
+      --good: #4fd18b;
+      --shadow: 0 18px 60px rgba(0, 0, 0, .35);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(rgba(13, 17, 23, .92), rgba(13, 17, 23, .92)),
+                  url("https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1800&q=75");
+      background-size: cover;
+      background-attachment: fixed;
+      color: var(--text);
+    }
+
+    button, input { font: inherit; }
+    button { border: 0; cursor: pointer; }
+
+    .app {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 22px 18px;
+      background: rgba(13, 17, 23, .94);
+      border-right: 1px solid var(--line);
+      overflow-y: auto;
+    }
+
+    .brand {
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 18px;
+      margin-bottom: 18px;
+    }
+
+    .brand-mark {
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      color: var(--accent);
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .brand h1 { font-size: 18px; margin: 0 0 8px; }
+    .brand p, .clearance p { margin: 0; color: var(--muted); font-size: 13px; }
+
+    .clearance {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 18px;
+    }
+
+    .clearance strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--accent);
+      text-transform: uppercase;
+      font-size: 13px;
+    }
+
+    .login-row { display: flex; gap: 8px; margin-top: 12px; }
+
+    .small-btn, .tab-btn, .primary-btn {
+      border-radius: 6px;
+      padding: 10px 12px;
+      background: var(--panel-2);
+      color: var(--text);
+      border: 1px solid var(--line);
+      transition: all .15s;
+    }
+
+    .small-btn:hover, .tab-btn:hover, .primary-btn:hover {
+      background: #273241;
+      border-color: #506071;
+    }
+
+    .small-btn { flex: 1; font-size: 13px; }
+
+    .nav-group { margin-bottom: 18px; }
+    .nav-title { color: var(--muted); font-size: 12px; text-transform: uppercase; margin: 0 0 8px; }
+
+    .nav-btn {
+      width: 100%;
+      min-height: 42px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      border-radius: 6px;
+      padding: 10px;
+      text-align: left;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .nav-btn:hover, .nav-btn.active {
+      background: rgba(201, 162, 39, .13);
+      color: #ffe28a;
+    }
+
+    .badge {
+      flex: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 3px 7px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .badge.public { color: var(--good); border-color: rgba(79, 209, 139, .45); }
+    .badge.locked { color: var(--danger); border-color: rgba(255, 92, 92, .45); }
+
+    .main { padding: 30px; min-width: 0; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 24px; }
+    .user-chip {
+      white-space: nowrap;
+      border: 1px solid var(--line);
+      background: rgba(21, 27, 35, .9);
+      border-radius: 999px;
+      padding: 9px 12px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .hero {
+      min-height: 360px;
+      display: grid;
+      align-content: end;
+      padding: 28px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(13, 17, 23, .2), rgba(13, 17, 23, .95)),
+                  url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1800&q=80");
+      background-size: cover;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+    .hero h2 { font-size: clamp(34px, 5vw, 64px); margin: 0 0 16px; }
+    .hero p { max-width: 780px; color: #d4dbe5; line-height: 1.65; }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .stat {
+      min-height: 120px;
+      border: 1px solid var(--line);
+      background: rgba(21, 27, 35, .92);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .stat span { color: var(--muted); font-size: 12px; text-transform: uppercase; }
+    .stat strong { display: block; font-size: 32px; margin-top: 16px; }
+
+    .content {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .page {
+      display: none;
+      border: 1px solid var(--line);
+      background: rgba(21, 27, 35, .94);
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+    .page.active { display: block; }
+    .page h3 { font-size: 28px; margin: 0 0 12px; }
+    .page h4 { font-size: 20px; margin: 20px 0 10px; border-left: 3px solid var(--accent); padding-left: 12px; }
+    .page p, .page li { color: #cdd6e1; line-height: 1.7; }
+
+    .meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+    .tag {
+      border: 1px solid var(--line);
+      background: rgba(29, 37, 48, .9);
+      border-radius: 999px;
+      padding: 6px 9px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .warning {
+      border-left: 4px solid var(--danger);
+      background: rgba(255, 92, 92, .09);
+      padding: 13px 14px;
+      border-radius: 6px;
+      color: #ffd0d0;
+      margin: 16px 0;
+    }
+    .classified {
+      display: grid;
+      place-items: center;
+      min-height: 260px;
+      border: 1px dashed rgba(255, 92, 92, .65);
+      background: rgba(255, 92, 92, .07);
+      text-align: center;
+      border-radius: 8px;
+      padding: 26px;
+    }
+    .classified h3 { color: var(--danger); }
+
+    .side-panel { position: sticky; top: 30px; display: grid; gap: 14px; }
+    .notice, .directory-card {
+      border: 1px solid var(--line);
+      background: rgba(21, 27, 35, .92);
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .notice h4, .directory-card h4 { margin: 0 0 10px; font-size: 15px; }
+    .notice p, .directory-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+
+    .dept-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0; }
+    .dept-tab {
+      border-radius: 6px;
+      padding: 10px 12px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      color: var(--text);
+    }
+    .dept-tab.active { border-color: rgba(201, 162, 39, .7); color: #ffe28a; background: rgba(201, 162, 39, .13); }
+    .dept-detail {
+      display: none;
+      border: 1px solid var(--line);
+      background: rgba(29, 37, 48, .75);
+      border-radius: 8px;
+      padding: 17px;
+    }
+    .dept-detail.active { display: block; }
+    .dept-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+    .dept-card {
+      border: 1px solid var(--line);
+      background: rgba(29, 37, 48, .8);
+      border-radius: 8px;
+      padding: 15px;
+    }
+    .dept-card h4 { margin: 0 0 8px; }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      display: none;
+      place-items: center;
+      background: rgba(0, 0, 0, .66);
+      z-index: 10;
+    }
+    .modal-backdrop.open { display: grid; }
+    .modal {
+      width: min(460px, 100%);
+      border: 1px solid var(--line);
+      background: #10161f;
+      border-radius: 8px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+    .modal h3 { margin: 0 0 8px; font-size: 22px; }
+    .field { display: grid; gap: 6px; margin-bottom: 12px; }
+    .field label { color: var(--muted); font-size: 13px; }
+    .field input {
+      width: 100%;
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 11px 12px;
+    }
+    .primary-btn {
+      width: 100%;
+      background: var(--accent);
+      color: #121212;
+      border-color: var(--accent);
+      font-weight: 700;
+      margin-top: 8px;
+    }
+    .hint { font-size: 12px; color: var(--muted); margin-top: 12px; }
+
+    @media (max-width: 980px) {
+      .app, .content { grid-template-columns: 1fr; }
+      .sidebar { position: relative; height: auto; }
+      .dashboard { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .side-panel { position: relative; top: auto; }
+    }
+    @media (max-width: 620px) {
+      .main { padding: 18px; }
+      .dashboard, .dept-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">67</div>
+      <h1>Administration de la Sécurité des Informations et des Archives</h1>
+      <p>Wiki RP SCP du département ASIA, Site 67.</p>
+    </div>
+    <section class="clearance">
+      <strong>Session</strong>
+      <p id="sessionText">Invité - accès public uniquement</p>
+      <div class="login-row">
+        <button class="small-btn" id="openLogin">Connexion</button>
+        <button class="small-btn" id="logoutBtn">Quitter</button>
+      </div>
+    </section>
+    <nav>
+      <div class="nav-group">
+        <p class="nav-title">Libre accès</p>
+        <button class="nav-btn active" data-page="accueil">Accueil <span class="badge public">Public</span></button>
+        <button class="nav-btn" data-page="site67">Site 67 <span class="badge public">Public</span></button>
+        <button class="nav-btn" data-page="departements">Départements <span class="badge public">Public</span></button>
+        <button class="nav-btn" data-page="procedures">Procédures ASIA <span class="badge public">Public</span></button>
+      </div>
+      <div class="nav-group">
+        <p class="nav-title">Dossier ASIA</p>
+        <button class="nav-btn" data-page="asia-mission">Mission ASIA <span class="badge public">Public</span></button>
+        <button class="nav-btn" data-page="asia-fonctionnement">Fonctionnement <span class="badge public">Public</span></button>
+        <button class="nav-btn" data-page="asia-structure">Structure ASIA <span class="badge public">Public</span></button>
+        <button class="nav-btn" data-page="asia-codes">Codes ASIA <span class="badge public">Public</span></button>
+        <button class="nav-btn" data-page="asia-protocoles">Protocoles <span class="badge public">Public</span></button>
+      </div>
+      <div class="nav-group">
+        <p class="nav-title">Archives classifiées</p>
+        <button class="nav-btn" data-page="incidents">Incidents internes <span class="badge locked">Niv. 3</span></button>
+        <button class="nav-btn" data-page="personnel">Dossiers personnel <span class="badge locked">Niv. 3</span></button>
+        <button class="nav-btn" data-page="asia-roles">Rôles IG <span class="badge locked">Niv. 3</span></button>
+        <button class="nav-btn" data-page="confinement">Annexes confinement <span class="badge locked">Niv. 4</span></button>
+      </div>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="user-chip" id="userChip">Accréditation: 0</div>
+      <a class="small-btn" href="admin.html" style="flex:none; text-decoration:none;">Administration</a>
+    </div>
+    <section class="hero">
+      <h2>ASIA - Site 67</h2>
+      <p>Base documentaire interne destinée au tri, à la protection et à la consultation contrôlée des informations sensibles de la Fondation SCP. Certaines pages demandent une accréditation active.</p>
+    </section>
+    <section class="dashboard">
+      <div class="stat"><span>Pages publiques</span><strong>13</strong></div>
+      <div class="stat"><span>Archives verrouillées</span><strong>03</strong></div>
+      <div class="stat"><span>Départements indexés</span><strong>06</strong></div>
+      <div class="stat"><span>Site concerné</span><strong>67</strong></div>
+    </section>
+    <div class="content">
+      <section>
+        <!-- ACCUEIL -->
+        <article class="page active" id="accueil">
+          <div class="meta"><span class="tag">Libre accès</span><span class="tag">ASIA</span></div>
+          <h3>Portail central ASIA</h3>
+          <p>L'Administration de la Sécurité des Informations et des Archives assure la conservation, la classification et la circulation contrôlée des renseignements du Site 67.</p>
+          <p>Ce wiki sert de point d'entrée RP pour consulter les départements de la Fondation, les notes de sécurité, les procédures d'archivage et les dossiers protégés.</p>
+          <div class="warning">Rappel RP: l'accès non autorisé à une archive classifiée peut entraîner une enquête interne, une suspension d'accréditation ou une amnésisation administrative.</div>
+        </article>
+
+        <!-- SITE 67 -->
+        <article class="page" id="site67">
+          <div class="meta"><span class="tag">Libre accès</span><span class="tag">Installation</span></div>
+          <h3>Présentation du Site 67</h3>
+          <p>Le Site 67 est une installation de la Fondation regroupant des secteurs administratifs, scientifiques, sécuritaires et logistiques. Les données exactes de localisation restent masquées.</p>
+          <ul><li>Secteur A: administration générale et accueil du personnel habilité.</li><li>Secteur B: laboratoires, salles d'analyse.</li><li>Secteur C: sécurité, armurerie contrôlée.</li><li>Secteur D: archives ASIA, serveurs internes.</li></ul>
+        </article>
+
+        <!-- MISSION ASIA -->
+        <article class="page" id="asia-mission">
+          <div class="meta"><span class="tag">Document classifié</span><span class="tag">Diffusion restreinte</span></div>
+          <h3>Mission de l'ASIA</h3>
+          <p>L'Administration de la Sécurité des Informations et des Archives (ASIA) est un organisme stratégique chargé de la protection, de la gestion, et de la supervision des informations sensibles au sein des systèmes nationaux et internationaux.</p>
+          <p><strong>Mandat :</strong> assurer la confidentialité, la disponibilité, l'intégrité des données critiques, leur archivage sécurisé et la conformité aux réglementations.</p>
+          <p>L'ASIA se concentre sur la gestion des informations classifiées, de la collecte à l'archivage, en empêchant les fuites et compromissions.</p>
+        </article>
+
+        <!-- FONCTIONNEMENT -->
+        <article class="page" id="asia-fonctionnement">
+          <div class="meta"><span class="tag">Procédure interne</span></div>
+          <h3>Fonctionnement de l'ASIA</h3>
+          <p>L'ASIA est un groupe indépendant dont le seul but est de protéger les archives. Neutre, elle n'apporte aucune aide directe à un département. Elle ne reçoit d'ordres que de ses supérieurs internes (n'obéissant pas directement au REDACTED/L4).</p>
+          <p>Elle peut arrêter toute personne jugée utile (franchissement non autorisé de la ligne des archives ou insubordination) et effectuer des contrôles d'identité sans raison dans son secteur (aux alentours avec autorisation).</p>
+        </article>
+
+        <!-- STRUCTURE -->
+        <article class="page" id="asia-structure">
+          <div class="meta"><span class="tag">Organigramme</span></div>
+          <h3>Structure de l'ASIA</h3>
+          <h4>Direction Générale</h4><p>Directeur ASIA (stratégies globales), directeurs internationaux/nationaux/locaux, Directeurs Exécutifs (accès prioritaire).</p>
+          <h4>Inspection et Supervision</h4><p>Inspecteur Principal, Inspecteur (enquêtes, audits réguliers).</p>
+          <h4>Gestion des Archives</h4><p>Chef des Archives (classification, préservation), Archivistes (gestion quotidienne).</p>
+          <h4>Coordination et GATS</h4><p>Superviseur, Coordinateur, Spécialistes. Groupe d'Applications Technologiques Spéciales (GATS) pour la sécurité physique : Colonels, Commandants, Capitaines, Adjudants, Sergents.</p>
+          <h4>Formation</h4><p>Instructeur-Chef et instructeurs pour la formation continue.</p>
+        </article>
+
+        <!-- CODES -->
+        <article class="page" id="asia-codes">
+          <div class="meta"><span class="tag">Protocoles d'urgence</span></div>
+          <h3>Codes opérationnels ASIA</h3>
+          <p><strong>Code 1 « Calme, très calme »</strong> — Accès à la salle des archives autorisé sur justificatif valide. Agression d'un membre = isolement.</p>
+          <p><strong>Code 2 « Calme »</strong> — Accès seulement pour récupérer des rapports. Agression = isolement.</p>
+          <p><strong>Code 3 « Agitation générale »</strong> — Accès restreint au personnel L3+. Toute personne entrant sans autorisation est hostile.</p>
+          <p><strong>Code 4 « Agitation Extrême »</strong> — Accès réservé au personnel L4+. Non-autorisé = tué sans délai.</p>
+          <p><strong>Code 5 « Vous ne voulez pas le savoir »</strong> — Accès totalement restreint. Agression d'un membre = exécution immédiate. Déploiement total des Spécialistes ASIA.</p>
+        </article>
+
+        <!-- PROTOCOLES -->
+        <article class="page" id="asia-protocoles">
+          <div class="meta"><span class="tag">Règlement ASIA</span></div>
+          <h3>Protocoles officiels</h3>
+          <p><strong>Article 1.</strong> Un L2 doit toujours être accompagné d'un L3 ou plus.</p>
+          <p><strong>Article 2.</strong> Les Ingénieurs et plus doivent présenter un justificatif L3 pour intervenir avec au moins un agent de sécurité d'archivage.</p>
+          <p><strong>Article 3.</strong> L'ASIA est autorisée à enfreindre le code éthique/pénal avec autorisation des départements concernés pour accomplir sa mission (hors autorité directe de la Fondation).</p>
+          <p><strong>Article 4.</strong> Un L4 de l'ASIA se doit de sanctionner un membre de son propre département en cas d'infraction.</p>
+          <p><strong>Article 5.</strong> Les membres de l'ASIA peuvent procéder à des contrôles d'identité sans raison apparente dans leur secteur (alentours avec autorisation).</p>
+          <p><strong>Article 6.</strong> Seuls les L5 / [REDACTED] / dérogation ASIA peuvent défier l'autorité de l'ASIA. Défier = exécution sans sommation.</p>
+          <p><strong>Article 7.</strong> Code 5 : accès à la salle des archives réservé au personnel explicitement autorisé (Accès restreint).</p>
+          <div class="warning">Toute infraction expose l'agent à des sanctions internes.</div>
+        </article>
+
+        <!-- DÉPARTEMENTS -->
+        <article class="page" id="departements">
+          <div class="meta"><span class="tag">Libre accès</span><span class="tag">Index</span></div>
+          <h3>Départements de la Fondation</h3>
+          <div class="dept-tabs">
+            <button class="dept-tab active" data-dept="asia">ASIA</button>
+            <button class="dept-tab" data-dept="securite">Sécurité</button>
+            <button class="dept-tab" data-dept="recherche">Recherche</button>
+            <button class="dept-tab" data-dept="medical">Médical</button>
+            <button class="dept-tab" data-dept="logistique">Logistique</button>
+            <button class="dept-tab" data-dept="ethique">Éthique</button>
+          </div>
+          <div class="dept-detail active" id="dept-asia"><h4>ASIA</h4><p>Archives, classifications, accès, registres.</p></div>
+          <div class="dept-detail" id="dept-securite"><h4>Sécurité</h4><p>Protection du site, contrôle d'accès, intervention incidents.</p></div>
+          <div class="dept-detail" id="dept-recherche"><h4>Recherche</h4><p>Étude des anomalies, rapports scientifiques, protocoles.</p></div>
+          <div class="dept-detail" id="dept-medical"><h4>Médical</h4><p>Soins, contrôles post-exposition, suivi.</p></div>
+          <div class="dept-detail" id="dept-logistique"><h4>Logistique</h4><p>Approvisionnement, maintenance, transport.</p></div>
+          <div class="dept-detail" id="dept-ethique"><h4>Comité d'Éthique</h4><p>Supervision des pratiques sensibles, avis disciplinaires.</p></div>
+          <div class="dept-grid">
+            <div class="dept-card"><h4>ASIA</h4><p>Informations classifiées</p></div>
+            <div class="dept-card"><h4>Sécurité</h4><p>Réponse aux incidents</p></div>
+            <div class="dept-card"><h4>Recherche</h4><p>Laboratoires SCP</p></div>
+            <div class="dept-card"><h4>Médical</h4><p>Unité de soins</p></div>
+            <div class="dept-card"><h4>Logistique</h4><p>Matériel et transports</p></div>
+            <div class="dept-card"><h4>Éthique</h4><p>Conformité</p></div>
+          </div>
+        </article>
+
+        <!-- PROCÉDURES -->
+        <article class="page" id="procedures">
+          <div class="meta"><span class="tag">Libre accès</span><span class="tag">Procédures</span></div>
+          <h3>Procédures ASIA</h3>
+          <p>Tout document transmis à l'ASIA doit être horodaté, identifié par département et associé à un niveau de classification.</p>
+          <ol><li>Réception par un agent ASIA.</li><li>Vérification de l'origine et des restrictions.</li><li>Attribution d'un niveau d'accréditation minimal.</li><li>Archivage dans le registre du Site 67.</li><li>Publication sur le wiki si autorisée.</li></ol>
+        </article>
+
+        <!-- INCIDENTS INTERNES (NIVEAU 3) -->
+        <article class="page locked-page" id="incidents" data-clearance="3">
+          <div class="classified"><div><h3>Archive classifiée - Niveau 3</h3><p>Cette page nécessite une accréditation de niveau 3 ou supérieur.</p><p style="font-size:13px; margin-top:8px;">Connectez-vous avec un compte habilité.</p></div></div>
+          <div class="secret-content">
+            <div class="meta"><span class="tag">Classifié niveau 3</span><span class="tag">Sécurité interne</span></div>
+            <h3>Registre des incidents internes (Niv.3)</h3>
+            <p>Liste détaillée des événements ayant nécessité une enquête interne ou une action disciplinaire au sein du Site 67.</p>
+            <ul>
+              <li><strong>Incident 67-ALPHA-12 (13/04/2026) :</strong> Tentative d'accès non autorisé aux archives de niveau 4 par un agent de recherche. L'agent a été immédiatement interpellé par la sécurité ASIA. Sanction : suspension d'accréditation de 30 jours et réaffectation hors site.</li>
+              <li><strong>Incident 67-BRAVO-07 (02/03/2026) :</strong> Fuite partielle d'informations classifiées via un terminal non sécurisé. Le responsable (niveau 2) a été rétrogradé au statut de personnel de soutien sans accès aux archives.</li>
+              <li><strong>Incident 67-CHARLIE-03 (19/01/2026) :</strong> Agression verbale et tentative d'obstruction à l'encontre d'un Archiviste ASIA. L'auteur a été placé en isolement 72h puis transféré vers un autre site.</li>
+              <li><strong>Incident 67-DELTA-01 (05/12/2025) :</strong> Perte d'un badge de niveau 3 non déclarée pendant 6 heures. Le badge a été révoqué. Le détenteur original a reçu un avertissement officiel.</li>
+            </ul>
+            <div class="warning">Ces informations sont strictement internes. Toute divulgation non autorisée sera sanctionnée conformément à l'article 3 du protocole ASIA.</div>
+          </div>
+        </article>
+
+        <!-- PERSONNEL (NIV 3) -->
+        <article class="page locked-page" id="personnel" data-clearance="3">
+          <div class="classified"><div><h3>Archive classifiée - Niveau 3</h3><p>Accréditation requise.</p></div></div>
+          <div class="secret-content"><div class="meta"><span class="tag">Classifié niveau 3</span></div><h3>Dossiers du personnel</h3><ul><li>Agent Morel: ASIA, archiviste principal, spécialité indexation des incidents.</li><li>Dr Vasseur: Recherche, responsable des comptes rendus expérimentaux du secteur B.</li><li>Capitaine Lenoir: Sécurité, coordination des rotations et verrouillages de secteur.</li></ul></div>
+        </article>
+
+        <!-- RÔLES IG (NIV 3) -->
+        <article class="page locked-page" id="asia-roles" data-clearance="3">
+          <div class="classified"><div><h3>Archive classifiée - Niveau 3</h3></div></div>
+          <div class="secret-content"><div class="meta"><span class="tag">Classifié niveau 3</span></div><h3>Rôles In-Game (ASIA)</h3><ul><li>Directeur ASIA WL — Accréditation Niveau 5, toutes zones Fondation</li><li>Directeur Adjoint ASIA WL — Accréditation Niveau 4+, toutes zones ASIA</li><li>Opérateurs WL — Accréditation Niveau 3+ (accès zone accréditée 4)</li><li>Archivistes WL — Accréditation Niveau 3+ (accès zone accréditée 3)</li></ul></div>
+        </article>
+
+        <!-- CONFINEMENT (NIV 4) -->
+        <article class="page locked-page" id="confinement" data-clearance="4">
+          <div class="classified"><div><h3>Archive classifiée - Niveau 4</h3><p>Direction et administrateurs ASIA uniquement.</p></div></div>
+          <div class="secret-content"><div class="meta"><span class="tag">Classifié niveau 4</span></div><h3>Annexes de confinement</h3><ul><li>Annexe 67-K: double validation ASIA/Sécurité avant diffusion modification protocole.</li><li>Annexe 67-M: sauvegarde froide obligatoire pour tout rapport d'essai anormal.</li><li>Annexe 67-R: archivage séparé des journaux vidéo, audio et transcriptions écrites.</li></ul></div>
+        </article>
+      </section>
+
+      <aside class="side-panel">
+        <section class="notice"><h4>Registre administrateur</h4><p>Les comptes, rôles et permissions sont consultables depuis la page Administration.</p></section>
+        <section class="directory-card"><h4>État du registre</h4><p>Wiki prêt pour ajouter d'autres pages SCP, protocoles, annonces RP.</p></section>
+        <section class="directory-card"><h4>Note importante</h4><p>La connexion fonctionne entièrement en local. Les sessions sont stockées dans votre navigateur.</p></section>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<div class="modal-backdrop" id="loginModal">
+  <div class="modal">
+    <h3 id="loginTitle">Connexion ASIA</h3>
+    <p>Identifiants pour obtenir une accréditation.</p>
+    <div class="field"><label for="username">Nom d'utilisateur</label><input id="username" type="text" placeholder="asia67"></div>
+    <div class="field"><label for="password">Mot de passe</label><input id="password" type="password" placeholder="********"></div>
+    <div class="warning" id="loginError" style="display:none;">Identifiants refusés par le registre ASIA.</div>
+    <button class="primary-btn" id="loginBtn">Valider la session</button>
+    <button class="small-btn" id="closeLogin" style="width:100%; margin-top:8px;">Annuler</button>
+    <div class="hint">
+      <strong>Comptes de test :</strong><br>
+      archiviste / archives (niv.3)<br>
+      asia_admin / secure_admin (niv.5)<br>
+      direction67 / o5site67 (niv.4)
+    </div>
+  </div>
+</div>
+
+<script>
+  // ==================== COMPTES INTEGRES ====================
+  const ACCOUNTS = {
+    users: [
+      { username: "asia67", password: "archives67", name: "Agent ASIA", role: "Agent ASIA", clearance: 2, permissions: "Archives publiques, procédures ASIA" },
+      { username: "superviseur67", password: "secteurd67", name: "Superviseur Site 67", role: "Superviseur Site 67", clearance: 3, permissions: "Accès niveau 2, dossiers du personnel" },
+      { username: "direction67", password: "o5site67", name: "Direction Site 67", role: "Direction Site 67", clearance: 4, permissions: "Accès complet aux archives classifiées" },
+      { username: "archiviste", password: "archives", name: "Archiviste", role: "Archiviste ASIA", clearance: 3, permissions: "Archives classifiées niveau 3" },
+      { username: "agent_l4", password: "asia", name: "Agent Niveau 4", role: "Agent Spécial", clearance: 4, permissions: "Accès niveau 4" },
+      { username: "directeur", password: "asia", name: "Directeur ASIA", role: "Directeur", clearance: 5, permissions: "Accès total" },
+      { username: "chercheur", password: "labo", name: "Chercheur", role: "Chercheur", clearance: 3, permissions: "Laboratoires" },
+      { username: "asia_admin", password: "secure_admin", name: "Admin ASIA", role: "Administrateur", clearance: 5, permissions: "Accès total" }
+    ],
+    admins: [
+      { username: "admin67", password: "asia-admin-67", name: "Propriétaire ASIA", role: "Propriétaire du registre", clearance: "Administration", permissions: "Consultation de la page Administration, comptes, mots de passe, rôles et permissions." }
+    ]
+  };
+
+  // ==================== GESTION SESSION ====================
+  let currentSession = null;
+
+  function saveSession(session) {
+    currentSession = session;
+    localStorage.setItem("asia_session", JSON.stringify(session));
+  }
+
+  function loadSession() {
+    const saved = localStorage.getItem("asia_session");
+    if (saved) {
+      try {
+        currentSession = JSON.parse(saved);
+        return currentSession;
+      } catch(e) { console.error(e); }
+    }
+    return null;
+  }
+
+  function clearSession() {
+    currentSession = null;
+    localStorage.removeItem("asia_session");
+  }
+
+  // ==================== AUTHENTIFICATION ====================
+  function authenticateUser(username, password) {
+    const user = ACCOUNTS.users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
+    if (user) {
+      return { type: "user", user: { name: user.name, role: user.role, clearance: user.clearance, permissions: user.permissions } };
+    }
+    return null;
+  }
+
+  function authenticateAdmin(username, password) {
+    const admin = ACCOUNTS.admins.find(a => a.username.toLowerCase() === username.toLowerCase() && a.password === password);
+    if (admin) {
+      return { type: "admin", admin: { name: admin.name, role: admin.role, clearance: admin.clearance, permissions: admin.permissions } };
+    }
+    return null;
+  }
+
+  // ==================== UI ====================
+  const pages = Array.from(document.querySelectorAll(".page"));
+  const navBtns = Array.from(document.querySelectorAll(".nav-btn"));
+  const loginModal = document.getElementById("loginModal");
+  const loginError = document.getElementById("loginError");
+  const sessionText = document.getElementById("sessionText");
+  const userChip = document.getElementById("userChip");
+
+  function setActivePage(pageId) {
+    pages.forEach(p => p.classList.toggle("active", p.id === pageId));
+    navBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.page === pageId));
+    updateClassifiedVisibility();
+  }
+
+  function updateClassifiedVisibility() {
+    const clearance = currentSession?.type === "user" ? currentSession.user.clearance : 0;
+    document.querySelectorAll(".locked-page").forEach(page => {
+      const required = Number(page.dataset.clearance || 0);
+      const allowed = clearance >= required;
+      const classifiedDiv = page.querySelector(".classified");
+      const secretDiv = page.querySelector(".secret-content");
+      if (classifiedDiv) classifiedDiv.style.display = allowed ? "none" : "grid";
+      if (secretDiv) secretDiv.style.display = allowed ? "block" : "none";
+    });
+    
+    if (currentSession && currentSession.type === "user") {
+      sessionText.textContent = `${currentSession.user.name} - accréditation niveau ${currentSession.user.clearance}`;
+      userChip.textContent = `Accréditation: ${currentSession.user.clearance} (${currentSession.user.role})`;
+    } else if (currentSession && currentSession.type === "admin") {
+      sessionText.textContent = `${currentSession.admin.name} - mode administration`;
+      userChip.textContent = `Mode: Administration (${currentSession.admin.role})`;
+    } else {
+      sessionText.textContent = "Invité - accès public uniquement";
+      userChip.textContent = "Accréditation: 0 (Invité)";
+    }
+  }
+
+  // ==================== EVENEMENTS ====================
+  navBtns.forEach(btn => btn.addEventListener("click", () => setActivePage(btn.dataset.page)));
+
+  document.querySelectorAll(".dept-tab").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".dept-tab").forEach(tab => tab.classList.toggle("active", tab === btn));
+      document.querySelectorAll(".dept-detail").forEach(panel => {
+        panel.classList.toggle("active", panel.id === `dept-${btn.dataset.dept}`);
+      });
+    });
+  });
+
+  document.getElementById("openLogin").addEventListener("click", () => {
+    loginError.style.display = "none";
+    loginModal.classList.add("open");
+    document.getElementById("username").focus();
+  });
+  
+  document.getElementById("closeLogin").addEventListener("click", () => loginModal.classList.remove("open"));
+  loginModal.addEventListener("click", (e) => { if (e.target === loginModal) loginModal.classList.remove("open"); });
+
+  document.getElementById("loginBtn").addEventListener("click", async () => {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value;
+    
+    let session = authenticateUser(username, password);
+    
+    if (!session) {
+      loginError.style.display = "block";
+      return;
+    }
+    
+    saveSession(session);
+    document.getElementById("password").value = "";
+    loginModal.classList.remove("open");
+    updateClassifiedVisibility();
+  });
+
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+    clearSession();
+    document.getElementById("username").value = "";
+    document.getElementById("password").value = "";
+    loginError.style.display = "none";
+    updateClassifiedVisibility();
+  });
+
+  document.getElementById("password").addEventListener("keydown", (e) => { if (e.key === "Enter") document.getElementById("loginBtn").click(); });
+
+  // Charger session au démarrage
+  loadSession();
+  updateClassifiedVisibility();
+</script>
+</body>
+</html>
