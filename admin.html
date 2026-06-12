@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ASIA Site 67 - Administration</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d1117;
+      --panel: #151b23;
+      --panel-2: #1d2530;
+      --text: #edf2f7;
+      --muted: #9aa7b6;
+      --line: #303b49;
+      --accent: #c9a227;
+      --danger: #ff5c5c;
+      --danger-bg: rgba(255, 92, 92, 0.1);
+      --good: #4fd18b;
+      --good-bg: rgba(79, 209, 139, 0.1);
+      --shadow: 0 18px 60px rgba(0, 0, 0, .35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(rgba(13, 17, 23, .94), rgba(13, 17, 23, .96)),
+                  url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1800&q=80");
+      background-size: cover;
+      background-attachment: fixed;
+      color: var(--text);
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .shell {
+      width: min(1280px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 24px 0 48px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-mark {
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      background: rgba(201, 162, 39, 0.1);
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 20px;
+    }
+
+    .brand h1 {
+      font-size: clamp(22px, 4vw, 36px);
+      margin: 0 0 4px;
+      background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .back-link:hover {
+      background: #273241;
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .login-panel {
+      max-width: 480px;
+      margin: 60px auto 0;
+      background: rgba(21, 27, 35, .96);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(4px);
+    }
+
+    .login-panel h2 {
+      font-size: 28px;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+
+    .login-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    input {
+      width: 100%;
+      background: #0a0e14;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px 16px;
+      color: var(--text);
+      font-size: 15px;
+      transition: all 0.2s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.2);
+    }
+
+    .warning {
+      display: none;
+      background: var(--danger-bg);
+      border-left: 3px solid var(--danger);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin: 16px 0;
+      color: #ffb3b3;
+      font-size: 14px;
+    }
+
+    .primary-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent) 0%, #b8891a 100%);
+      color: #111;
+      font-weight: 700;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 16px;
+      margin-top: 8px;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(201, 162, 39, 0.3);
+    }
+
+    .hint {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .admin-panel {
+      display: none;
+      background: rgba(21, 27, 35, .96);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 28px;
+      backdrop-filter: blur(4px);
+    }
+
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 24px;
+    }
+
+    .admin-header h2 {
+      font-size: 26px;
+      margin: 0 0 4px;
+    }
+
+    .admin-header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--good-bg);
+      border: 1px solid rgba(79, 209, 139, 0.4);
+      color: var(--good);
+      border-radius: 40px;
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: rgba(13, 17, 23, 0.7);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 18px;
+      transition: all 0.2s;
+    }
+
+    .stat-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .stat-card .stat-label {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .stat-card .stat-value {
+      font-size: 36px;
+      font-weight: 800;
+      margin-top: 10px;
+      color: var(--accent);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(13, 17, 23, 0.5);
+    }
+
+    th {
+      text-align: left;
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.3);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      color: #d5deea;
+      font-size: 13px;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: rgba(201, 162, 39, 0.05);
+    }
+
+    code {
+      background: #0a0e14;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: #ffe28a;
+      border: 1px solid var(--line);
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .secondary-btn {
+      padding: 10px 20px;
+      background: var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 14px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .secondary-btn:hover {
+      background: #273241;
+      border-color: var(--danger);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--good-bg);
+      border: 1px solid var(--good);
+      color: var(--good);
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 13px;
+      transform: translateX(400px);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+    }
+
+    .toast.show {
+      transform: translateX(0);
+    }
+
+    .toast.error {
+      background: var(--danger-bg);
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    @media (max-width: 800px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .admin-panel {
+        padding: 18px;
+      }
+      .login-panel {
+        margin: 30px 16px;
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+<main class="shell">
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark">67</div>
+      <div>
+        <h1>Registre ASIA</h1>
+        <p>Console d'administration et gestion des accréditations</p>
+      </div>
+    </div>
+    <a class="back-link" href="index.html">← Retour au portail</a>
+  </div>
+
+  <!-- Panneau de connexion -->
+  <div class="login-panel" id="loginPanel">
+    <div class="login-icon">🔐</div>
+    <h2>Accès restreint</h2>
+    <p class="muted" style="margin-bottom: 24px;">Cette interface est réservée au propriétaire du registre ASIA.</p>
+    
+    <div class="field">
+      <label>IDENTIFIANT ADMINISTRATEUR</label>
+      <input type="text" id="adminUser" placeholder="admin67" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>MOT DE PASSE</label>
+      <input type="password" id="adminPassword" placeholder="Mot de passe">
+    </div>
+    
+    <div class="warning" id="adminError">
+      ⚠️ Accès refusé. Identifiant ou mot de passe incorrect.
+    </div>
+    
+    <button class="primary-btn" id="adminLoginBtn">🔓 DÉVERROUILLER LE REGISTRE</button>
+    
+    <div class="hint">
+      <span style="color: var(--accent);">⛓️ Accès propriétaire uniquement</span><br>
+      Contactez l'administration ASIA en cas de perte d'accréditation.
+    </div>
+  </div>
+
+  <!-- Panneau d'administration -->
+  <div class="admin-panel" id="adminPanel">
+    <div class="admin-header">
+      <div>
+        <h2>📋 Registre des accès</h2>
+        <p>Liste exhaustive des comptes habilités sur le portail ASIA Site 67</p>
+      </div>
+      <div class="badge" id="adminBadge">
+        👑 Propriétaire connecté
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-label">👥 Comptes utilisateurs</div>
+        <div class="stat-value" id="statUsers">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">👑 Comptes administrateurs</div>
+        <div class="stat-value" id="statAdmins">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">📊 Total général</div>
+        <div class="stat-value" id="statTotal">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">⭐ Niveau maximum</div>
+        <div class="stat-value">L5</div>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Identifiant</th>
+            <th>Mot de passe</th>
+            <th>Rôle</th>
+            <th>Accréditation</th>
+            <th>Permissions</th>
+          </tr>
+        </thead>
+        <tbody id="accountsTableBody">
+          <tr><td colspan="5" style="text-align: center;">Chargement...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="actions">
+      <button class="secondary-btn" id="lockAdminBtn">🔒 Verrouiller la session</button>
+      <a class="secondary-btn" href="index.html">🏠 Accueil ASIA</a>
+    </div>
+  </div>
+</main>
+
+<div id="toast" class="toast"></div>
+
+<script>
+  // ============================================================
+  //  BASE DE DONNEES INTEGREE (tous les comptes)
+  // ============================================================
+  const SECURE_REGISTRY = {
+    users: [
+      { username: "asia67", password: "archives67", name: "Agent ASIA", role: "Agent ASIA", clearance: 2, permissions: "Archives publiques, procedures ASIA, acces niveau 2" },
+      { username: "superviseur67", password: "secteurd67", name: "Superviseur", role: "Superviseur Site 67", clearance: 3, permissions: "Dossiers personnel, supervision consultations" },
+      { username: "direction67", password: "o5site67", name: "Direction", role: "Direction Site 67", clearance: 4, permissions: "Acces complet archives classifiees" },
+      { username: "archiviste", password: "archives", name: "Archiviste", role: "Archiviste ASIA", clearance: 3, permissions: "Gestion archives niveau 3" },
+      { username: "agent_l4", password: "asia", name: "Agent Special", role: "Agent Niveau 4", clearance: 4, permissions: "Acces zones restreintes" },
+      { username: "directeur", password: "asia", name: "Directeur", role: "Directeur ASIA", clearance: 5, permissions: "Acces total, override securite" },
+      { username: "chercheur", password: "labo", name: "Chercheur", role: "Chercheur SCP", clearance: 3, permissions: "Laboratoires, protocoles" },
+      { username: "asia_admin", password: "secure_admin", name: "Admin Systeme", role: "Administrateur ASIA", clearance: 5, permissions: "Super administrateur" }
+    ],
+    admins: [
+      { username: "admin67", password: "asia-admin-67", name: "Proprietaire ASIA", role: "Proprietaire du registre", clearance: "Administration", permissions: "Gestion complete des comptes et permissions" }
+    ]
+  };
+
+  // ============================================================
+  //  GESTION DE LA SESSION (localStorage)
+  // ============================================================
+  function saveAdminSession(adminData) {
+    localStorage.setItem("asia_admin_auth", JSON.stringify({
+      authenticated: true,
+      admin: adminData,
+      timestamp: Date.now()
+    }));
+  }
+
+  function getAdminSession() {
+    try {
+      const saved = localStorage.getItem("asia_admin_auth");
+      if (!saved) return null;
+      const data = JSON.parse(saved);
+      if (data.authenticated && data.admin) {
+        if (Date.now() - data.timestamp < 24 * 60 * 60 * 1000) {
+          return data.admin;
+        }
+      }
+      return null;
+    } catch(e) {
+      return null;
+    }
+  }
+
+  function clearAdminSession() {
+    localStorage.removeItem("asia_admin_auth");
+  }
+
+  // ============================================================
+  //  AUTHENTIFICATION
+  // ============================================================
+  function verifyAdminCredentials(username, password) {
+    const admin = SECURE_REGISTRY.admins.find(
+      function(a) {
+        return a.username.toLowerCase() === username.toLowerCase() && a.password === password;
+      }
+    );
+    if (admin) {
+      return {
+        name: admin.name,
+        role: admin.role,
+        clearance: admin.clearance,
+        permissions: admin.permissions
+      };
+    }
+    return null;
+  }
+
+  // ============================================================
+  //  AFFICHAGE DES DONNEES
+  // ============================================================
+  function showToast(message, isError) {
+    var toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.classList.add("show");
+    if (isError) {
+      toast.classList.add("error");
+    } else {
+      toast.classList.remove("error");
+    }
+    
+    setTimeout(function() {
+      toast.classList.remove("show");
+    }, 3000);
+  }
+
+  function escapeHtml(str) {
+    if (!str) return "";
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function renderAccountsTable() {
+    var tbody = document.getElementById("accountsTableBody");
+    
+    var allEntries = [];
+    
+    for (var i = 0; i < SECURE_REGISTRY.users.length; i++) {
+      var u = SECURE_REGISTRY.users[i];
+      allEntries.push({
+        username: u.username,
+        password: u.password,
+        role: u.role,
+        clearance: "Niveau " + u.clearance,
+        permissions: u.permissions
+      });
+    }
+    
+    for (var j = 0; j < SECURE_REGISTRY.admins.length; j++) {
+      var a = SECURE_REGISTRY.admins[j];
+      allEntries.push({
+        username: a.username,
+        password: a.password,
+        role: a.role,
+        clearance: a.clearance,
+        permissions: a.permissions
+      });
+    }
+
+    document.getElementById("statUsers").textContent = SECURE_REGISTRY.users.length;
+    document.getElementById("statAdmins").textContent = SECURE_REGISTRY.admins.length;
+    document.getElementById("statTotal").textContent = allEntries.length;
+
+    var html = "";
+    for (var k = 0; k < allEntries.length; k++) {
+      var entry = allEntries[k];
+      html += "<tr>";
+      html += "<td><code>" + escapeHtml(entry.username) + "</code></td>";
+      html += "<td><code>" + escapeHtml(entry.password) + "</code></td>";
+      html += "<td>" + escapeHtml(entry.role) + "</td>";
+      html += "<td>" + escapeHtml(entry.clearance) + "</td>";
+      html += "<td style=\"font-size: 12px;\">" + escapeHtml(entry.permissions) + "</td>";
+      html += "</tr>";
+    }
+    
+    tbody.innerHTML = html;
+  }
+
+  // ============================================================
+  //  CONTROLEURS D'INTERFACE
+  // ============================================================
+  var loginPanel = document.getElementById("loginPanel");
+  var adminPanel = document.getElementById("adminPanel");
+  var adminError = document.getElementById("adminError");
+  var adminUserInput = document.getElementById("adminUser");
+  var adminPasswordInput = document.getElementById("adminPassword");
+  var adminLoginBtn = document.getElementById("adminLoginBtn");
+  var lockAdminBtn = document.getElementById("lockAdminBtn");
+
+  function showLoginPanel() {
+    loginPanel.style.display = "block";
+    adminPanel.style.display = "none";
+    adminUserInput.value = "";
+    adminPasswordInput.value = "";
+    adminError.style.display = "none";
+  }
+
+  function showAdminPanel(admin) {
+    renderAccountsTable();
+    loginPanel.style.display = "none";
+    adminPanel.style.display = "block";
+    document.getElementById("adminBadge").innerHTML = "👑 " + admin.name + " • " + admin.role;
+    showToast("Bienvenue " + admin.name + ", acces au registre autorise.", false);
+  }
+
+  function handleAdminLogin() {
+    var username = adminUserInput.value.trim();
+    var password = adminPasswordInput.value;
+
+    if (!username || !password) {
+      adminError.textContent = "⚠️ Veuillez remplir tous les champs.";
+      adminError.style.display = "block";
+      return;
+    }
+
+    var admin = verifyAdminCredentials(username, password);
+    
+    if (!admin) {
+      adminError.textContent = "⛔ ACCES REFUSE : Identifiant ou mot de passe incorrect.";
+      adminError.style.display = "block";
+      adminPasswordInput.value = "";
+      adminPasswordInput.focus();
+      showToast("Echec de l'authentification", true);
+      return;
+    }
+
+    saveAdminSession(admin);
+    showAdminPanel(admin);
+  }
+
+  function handleLogout() {
+    clearAdminSession();
+    showLoginPanel();
+    showToast("Session verrouillee.", false);
+  }
+
+  // ============================================================
+  //  INITIALISATION ET EVENEMENTS
+  // ============================================================
+  adminLoginBtn.addEventListener("click", handleAdminLogin);
+  lockAdminBtn.addEventListener("click", handleLogout);
+
+  adminPasswordInput.addEventListener("keypress", function(e) {
+    if (e.key === "Enter") handleAdminLogin();
+  });
+
+  adminUserInput.addEventListener("keypress", function(e) {
+    if (e.key === "Enter") adminPasswordInput.focus();
+  });
+
+  var existingAdmin = getAdminSession();
+  if (existingAdmin) {
+    showAdminPanel(existingAdmin);
+  } else {
+    showLoginPanel();
+  }
+</script>
+</body>
+</html>
