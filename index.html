@@ -141,6 +141,25 @@
     .badge.public { color: var(--good); border-color: rgba(79, 209, 139, .45); }
     .badge.locked { color: var(--danger); border-color: rgba(255, 92, 92, .45); }
 
+    /* Bannière Rôles IG - uniquement sur la page dédiée */
+    .role-banner {
+      background: linear-gradient(135deg, rgba(201, 162, 39, 0.15), rgba(79, 209, 139, 0.05));
+      border-left: 6px solid var(--accent);
+      border-radius: 8px;
+      padding: 18px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      backdrop-filter: blur(8px);
+    }
+    .role-banner-content { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+    .role-banner h3 { margin: 0; font-size: 1.8rem; letter-spacing: 2px; color: var(--accent); }
+    .role-banner p { margin: 0; color: var(--text); font-weight: 500; background: rgba(0,0,0,0.5); padding: 4px 10px; border-radius: 40px; }
+    .role-banner .level { background: var(--accent); color: #0a0c10; padding: 5px 12px; border-radius: 40px; font-weight: bold; font-size: 0.9rem; }
+
     .main { padding: 30px; min-width: 0; }
     .topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 24px; }
     .user-chip {
@@ -355,7 +374,7 @@
         <p class="nav-title">Archives classifiées</p>
         <button class="nav-btn" data-page="incidents">Incidents internes <span class="badge locked">Niv. 3</span></button>
         <button class="nav-btn" data-page="personnel">Dossiers personnel <span class="badge locked">Niv. 3</span></button>
-        <button class="nav-btn" data-page="asia-roles">Rôles IG <span class="badge locked">Niv. 3</span></button>
+        <button class="nav-btn" data-page="asia-roles">Rôles IG <span class="badge locked">Niv. 2</span></button>
         <button class="nav-btn" data-page="confinement">Annexes confinement <span class="badge locked">Niv. 4</span></button>
       </div>
     </nav>
@@ -363,16 +382,26 @@
 
   <main class="main">
     <div class="topbar">
-      <div class="user-chip" id="userChip">Accréditation: 0</div>
+      <div class="user-chip" id="userChip">Accréditation: 0 (Invité)</div>
       <a class="small-btn" href="admin.html" style="flex:none; text-decoration:none;">Administration</a>
     </div>
+
+    <!-- Bannière Rôles IG - n'apparaît que sur la page asia-roles -->
+    <div id="roleBanner" class="role-banner" style="display: none;">
+      <div class="role-banner-content">
+        <h3>Rôles IG</h3>
+        <p>Accès aux hiérarchies et permissions in-game du département ASIA</p>
+      </div>
+      <span class="level">Niveau d'accès : 2</span>
+    </div>
+
     <section class="hero">
       <h2>ASIA - Site 67</h2>
       <p>Base documentaire interne destinée au tri, à la protection et à la consultation contrôlée des informations sensibles de la Fondation SCP. Certaines pages demandent une accréditation active.</p>
     </section>
     <section class="dashboard">
       <div class="stat"><span>Pages publiques</span><strong>13</strong></div>
-      <div class="stat"><span>Archives verrouillées</span><strong>03</strong></div>
+      <div class="stat"><span>Archives verrouillées</span><strong>04</strong></div>
       <div class="stat"><span>Départements indexés</span><strong>06</strong></div>
       <div class="stat"><span>Site concerné</span><strong>67</strong></div>
     </section>
@@ -507,10 +536,23 @@
           <div class="secret-content"><div class="meta"><span class="tag">Classifié niveau 3</span></div><h3>Dossiers du personnel</h3><ul><li>Agent Morel: ASIA, archiviste principal, spécialité indexation des incidents.</li><li>Dr Vasseur: Recherche, responsable des comptes rendus expérimentaux du secteur B.</li><li>Capitaine Lenoir: Sécurité, coordination des rotations et verrouillages de secteur.</li></ul></div>
         </article>
 
-        <!-- RÔLES IG (NIV 3) -->
+        <!-- RÔLES IG (NIV 2) -->
         <article class="page locked-page" id="asia-roles" data-clearance="2">
-          <div class="classified"><div><h3>Archive classifiée - Niveau 2</h3></div></div>
-          <div class="secret-content"><div class="meta"><span class="tag">Classifié niveau 2</span></div><h3>Rôles In-Game (ASIA)</h3><ul><li>Directeur ASIA WL — Accréditation Niveau 5, toutes zones Fondation</li><li>Directeur Adjoint ASIA WL — Accréditation Niveau 4+, toutes zones ASIA</li><li>Opérateurs WL — Accréditation Niveau 3+ (accès zone accréditée 4)</li><li>Archivistes WL — Accréditation Niveau 3+ (accès zone accréditée 3)</li></ul></div>
+          <div class="classified"><div><h3>Archive classifiée - Niveau 2</h3><p>Cette page requiert une accréditation Niveau 2 minimum.</p></div></div>
+          <div class="secret-content">
+            <div class="meta"><span class="tag">Classifié niveau 2</span></div>
+            <h3>Rôles In-Game (ASIA)</h3>
+            <p><strong>Hiérarchie et accréditations officielles du département ASIA — Site 67</strong></p>
+            <ul>
+              <li><strong>Directeur ASIA WL</strong> — Accréditation Niveau 5, toutes zones Fondation</li>
+              <li><strong>Directeur Adjoint ASIA WL</strong> — Accréditation Niveau 4+, toutes zones ASIA</li>
+              <li><strong>Opérateurs WL</strong> — Accréditation Niveau 3+ (accès zone accréditée 4)</li>
+              <li><strong>Archivistes WL</strong> — Accréditation Niveau 3+ (accès zone accréditée 3)</li>
+              <li><strong>Agent de Sécurité des Archives</strong> — Accréditation Niveau 2 (Protection des périmètres)</li>
+              <li><strong>Stagiaire ASIA</strong> — Accréditation Niveau 1 (supervision obligatoire)</li>
+            </ul>
+            <div class="warning">La liste complète des permissions est consultable par les membres habilités Niveau 2. Toute tentative d'usurpation sera immédiatement signalée au Comité d'Éthique.</div>
+          </div>
         </article>
 
         <!-- CONFINEMENT (NIV 4) -->
@@ -539,10 +581,7 @@
     <button class="primary-btn" id="loginBtn">Valider la session</button>
     <button class="small-btn" id="closeLogin" style="width:100%; margin-top:8px;">Annuler</button>
     <div class="hint">
-      <strong>Comptes de test :</strong><br>
-      archiviste / archives (niv.3)<br>
-      asia_admin / secure_admin (niv.5)<br>
-      direction67 / o5site67 (niv.4)
+
     </div>
   </div>
 </div>
@@ -613,10 +652,19 @@
   const loginError = document.getElementById("loginError");
   const sessionText = document.getElementById("sessionText");
   const userChip = document.getElementById("userChip");
+  const roleBanner = document.getElementById("roleBanner");
 
   function setActivePage(pageId) {
     pages.forEach(p => p.classList.toggle("active", p.id === pageId));
     navBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.page === pageId));
+    
+    // Afficher/masquer la bannière "Rôles IG" uniquement sur la page asia-roles
+    if (pageId === "asia-roles") {
+      roleBanner.style.display = "flex";
+    } else {
+      roleBanner.style.display = "none";
+    }
+    
     updateClassifiedVisibility();
   }
 
@@ -691,9 +739,11 @@
 
   document.getElementById("password").addEventListener("keydown", (e) => { if (e.key === "Enter") document.getElementById("loginBtn").click(); });
 
-  // Charger session au démarrage
   loadSession();
   updateClassifiedVisibility();
+  
+  // Initialisation : masquer la bannière au chargement (page Accueil active par défaut)
+  roleBanner.style.display = "none";
 </script>
 </body>
 </html>
