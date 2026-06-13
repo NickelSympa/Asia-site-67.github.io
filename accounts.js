@@ -1,5 +1,5 @@
 {
-  "users": [
+  "users":[
     {
       "username": "asia67",
       "password": "archives67",
