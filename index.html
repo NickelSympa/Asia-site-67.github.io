@@ -516,55 +516,32 @@
         <!-- INCIDENTS INTERNES (NIVEAU 3) -->
         <article class="page locked-page" id="incidents" data-clearance="3">
           <div class="classified"><div><h3>Archive classifiée - Niveau 3</h3><p>Cette page nécessite une accréditation de niveau 3 ou supérieur.</p><p style="font-size:13px; margin-top:8px;">Connectez-vous avec un compte habilité.</p></div></div>
-          <div class="secret-content">
-            <div class="meta"><span class="tag">Classifié niveau 3</span><span class="tag">Sécurité interne</span></div>
-            <h3>Registre des incidents internes (Niv.3)</h3>
-            <p>Liste détaillée des événements ayant nécessité une enquête interne ou une action disciplinaire au sein du Site 67.</p>
-            <ul>
-              <li><strong>Incident 67-ALPHA-12 (13/04/2026) :</strong> Tentative d'accès non autorisé aux archives de niveau 4 par un agent de recherche. L'agent a été immédiatement interpellé par la sécurité ASIA. Sanction : suspension d'accréditation de 30 jours et réaffectation hors site.</li>
-              <li><strong>Incident 67-BRAVO-07 (02/03/2026) :</strong> Fuite partielle d'informations classifiées via un terminal non sécurisé. Le responsable (niveau 2) a été rétrogradé au statut de personnel de soutien sans accès aux archives.</li>
-              <li><strong>Incident 67-CHARLIE-03 (19/01/2026) :</strong> Agression verbale et tentative d'obstruction à l'encontre d'un Archiviste ASIA. L'auteur a été placé en isolement 72h puis transféré vers un autre site.</li>
-              <li><strong>Incident 67-DELTA-01 (05/12/2025) :</strong> Perte d'un badge de niveau 3 non déclarée pendant 6 heures. Le badge a été révoqué. Le détenteur original a reçu un avertissement officiel.</li>
-            </ul>
-            <div class="warning">Ces informations sont strictement internes. Toute divulgation non autorisée sera sanctionnée conformément à l'article 3 du protocole ASIA.</div>
-          </div>
+          <div class="secret-content" id="secret-incidents"></div>
         </article>
 
         <!-- PERSONNEL (NIV 3) -->
         <article class="page locked-page" id="personnel" data-clearance="3">
           <div class="classified"><div><h3>Archive classifiée - Niveau 3</h3><p>Accréditation requise.</p></div></div>
-          <div class="secret-content"><div class="meta"><span class="tag">Classifié niveau 3</span></div><h3>Dossiers du personnel</h3><ul><li>Agent Morel: ASIA, archiviste principal, spécialité indexation des incidents.</li><li>Dr Vasseur: Recherche, responsable des comptes rendus expérimentaux du secteur B.</li><li>Capitaine Lenoir: Sécurité, coordination des rotations et verrouillages de secteur.</li></ul></div>
+          <div class="secret-content" id="secret-personnel"></div>
         </article>
 
         <!-- RÔLES IG (NIV 2) -->
         <article class="page locked-page" id="asia-roles" data-clearance="2">
           <div class="classified"><div><h3>Archive classifiée - Niveau 2</h3><p>Cette page requiert une accréditation Niveau 2 minimum.</p></div></div>
-          <div class="secret-content">
-            <div class="meta"><span class="tag">Classifié niveau 2</span></div>
-            <h3>Rôles In-Game (ASIA)</h3>
-            <p><strong>Hiérarchie et accréditations officielles du département ASIA — Site 67</strong></p>
-            <ul>
-              <li><strong>Directeur ASIA WL</strong> — Accréditation Niveau 5, toutes zones Fondation</li>
-              <li><strong>Directeur Adjoint ASIA WL</strong> — Accréditation Niveau 4+, toutes zones ASIA</li>
-              <li><strong>Opérateurs WL</strong> — Accréditation Niveau 3+ (accès zone accréditée 4)</li>
-              <li><strong>Archivistes WL</strong> — Accréditation Niveau 3+ (accès zone accréditée 3)</li>
-              <li><strong>Agent de Sécurité des Archives</strong> — Accréditation Niveau 2 (Protection des périmètres)</li>
-            </ul>
-            <div class="warning">La liste complète des permissions est consultable par les membres habilités Niveau 2. Toute tentative d'usurpation sera immédiatement signalée au Comité d'Éthique.</div>
-          </div>
+          <div class="secret-content" id="secret-asia-roles"></div>
         </article>
 
         <!-- CONFINEMENT (NIV 4) -->
         <article class="page locked-page" id="confinement" data-clearance="4">
           <div class="classified"><div><h3>Archive classifiée - Niveau 4</h3><p>Direction et administrateurs ASIA uniquement.</p></div></div>
-          <div class="secret-content"><div class="meta"><span class="tag">Classifié niveau 4</span></div><h3>Annexes de confinement</h3><ul><li>Annexe 67-K: double validation ASIA/Sécurité avant diffusion modification protocole.</li><li>Annexe 67-M: sauvegarde froide obligatoire pour tout rapport d'essai anormal.</li><li>Annexe 67-R: archivage séparé des journaux vidéo, audio et transcriptions écrites.</li></ul></div>
+          <div class="secret-content" id="secret-confinement"></div>
         </article>
       </section>
 
       <aside class="side-panel">
         <section class="notice"><h4>Registre administrateur</h4><p>Les comptes, rôles et permissions sont consultables depuis la page Administration.</p></section>
         <section class="directory-card"><h4>État du registre</h4><p>Wiki prêt pour ajouter d'autres pages SCP, protocoles, annonces RP.</p></section>
-        <section class="directory-card"><h4>Note importante</h4><p>La connexion fonctionne entièrement en local. Les sessions sont stockées dans votre navigateur.</p></section>
+        <section class="directory-card"><h4>Note importante</h4><p>L'authentification et les archives classifiées sont gérées via un registre sécurisé externe (Supabase). Le contenu protégé n'est transmis qu'aux comptes habilités.</p></section>
       </aside>
     </div>
   </main>
@@ -585,51 +562,46 @@
   </div>
 </div>
 
-<script src="accounts.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // ==================== COMPTES (definis dans accounts.js) ====================
-  // Voir accounts.js pour la liste complete et la note sur la securite.
-  const ACCOUNTS = ASIA_ACCOUNTS;
+  // ==================== CONNEXION SUPABASE ====================
+  const SUPABASE_URL = "https://ywpsrdxgnihraodwuear.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3cHNyZHhnbmlocmFvZHd1ZWFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzMjU4NDQsImV4cCI6MjA5NjkwMTg0NH0.0zss_Kd6jErGWa1QkBoXY4ML7fMIwKJCWUSwPgExQFw";
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const EMAIL_DOMAIN = "@asia-site67.local";
 
-  // ==================== GESTION SESSION ====================
-  let currentSession = null;
+  // ==================== SESSION ====================
+  let currentSession = null; // { profile: {...}, allowedContent: {...} }
 
-  function saveSession(session) {
-    currentSession = session;
-    localStorage.setItem("asia_session", JSON.stringify(session));
-  }
-
-  function loadSession() {
-    const saved = localStorage.getItem("asia_session");
-    if (saved) {
-      try {
-        currentSession = JSON.parse(saved);
-        return currentSession;
-      } catch(e) { console.error(e); }
+  async function fetchProfile(userId) {
+    const { data, error } = await supabase.from("profiles").select("*").eq("id", userId).single();
+    if (error) {
+      console.error("Erreur de chargement du profil:", error);
+      return null;
     }
-    return null;
+    return data;
   }
 
-  function clearSession() {
-    currentSession = null;
-    localStorage.removeItem("asia_session");
-  }
+  async function loginUser(username, password) {
+    const email = username.toLowerCase() + EMAIL_DOMAIN;
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error || !data.user) return null;
 
-  // ==================== AUTHENTIFICATION ====================
-  function authenticateUser(username, password) {
-    const user = ACCOUNTS.users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
-    if (user) {
-      return { type: "user", user: { name: user.name, role: user.role, clearance: user.clearance, permissions: user.permissions } };
+    const profile = await fetchProfile(data.user.id);
+    if (!profile) {
+      await supabase.auth.signOut();
+      return null;
     }
-    return null;
+    return { profile };
   }
 
-  function authenticateAdmin(username, password) {
-    const admin = ACCOUNTS.admins.find(a => a.username.toLowerCase() === username.toLowerCase() && a.password === password);
-    if (admin) {
-      return { type: "admin", admin: { name: admin.name, role: admin.role, clearance: admin.clearance, permissions: admin.permissions } };
+  async function restoreSession() {
+    const { data } = await supabase.auth.getSession();
+    if (data.session) {
+      const profile = await fetchProfile(data.session.user.id);
+      if (profile) currentSession = { profile };
     }
-    return null;
   }
 
   // ==================== UI ====================
@@ -640,42 +612,65 @@
   const sessionText = document.getElementById("sessionText");
   const userChip = document.getElementById("userChip");
   const roleBanner = document.getElementById("roleBanner");
+  const loginBtn = document.getElementById("loginBtn");
 
   function setActivePage(pageId) {
     pages.forEach(p => p.classList.toggle("active", p.id === pageId));
     navBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.page === pageId));
-    
+
     // Afficher/masquer la bannière "Rôles IG" uniquement sur la page asia-roles
-    if (pageId === "asia-roles") {
-      roleBanner.style.display = "flex";
-    } else {
-      roleBanner.style.display = "none";
-    }
-    
-    updateClassifiedVisibility();
+    roleBanner.style.display = (pageId === "asia-roles") ? "flex" : "none";
+
+    applyAccessToDOM();
   }
 
-  function updateClassifiedVisibility() {
-    const clearance = currentSession?.type === "user" ? currentSession.user.clearance : 0;
+  // Affiche/masque le contenu classifié déjà recupéré (sans nouvelle requête)
+  function applyAccessToDOM() {
+    const allowed = currentSession?.allowedContent || {};
     document.querySelectorAll(".locked-page").forEach(page => {
-      const required = Number(page.dataset.clearance || 0);
-      const allowed = clearance >= required;
       const classifiedDiv = page.querySelector(".classified");
       const secretDiv = page.querySelector(".secret-content");
-      if (classifiedDiv) classifiedDiv.style.display = allowed ? "none" : "grid";
-      if (secretDiv) secretDiv.style.display = allowed ? "block" : "none";
+      const content = allowed[page.id];
+      if (content) {
+        secretDiv.innerHTML = content;
+        classifiedDiv.style.display = "none";
+        secretDiv.style.display = "block";
+      } else {
+        secretDiv.innerHTML = "";
+        classifiedDiv.style.display = "grid";
+        secretDiv.style.display = "none";
+      }
     });
-    
-    if (currentSession && currentSession.type === "user") {
-      sessionText.textContent = `${currentSession.user.name} - accréditation niveau ${currentSession.user.clearance}`;
-      userChip.textContent = `Accréditation: ${currentSession.user.clearance} (${currentSession.user.role})`;
-    } else if (currentSession && currentSession.type === "admin") {
-      sessionText.textContent = `${currentSession.admin.name} - mode administration`;
-      userChip.textContent = `Mode: Administration (${currentSession.admin.role})`;
+  }
+
+  function updateSessionDisplay() {
+    if (currentSession) {
+      const p = currentSession.profile;
+      sessionText.textContent = `${p.display_name} - accréditation niveau ${p.clearance}`;
+      userChip.textContent = `Accréditation: ${p.clearance} (${p.role})`;
     } else {
       sessionText.textContent = "Invité - accès public uniquement";
       userChip.textContent = "Accréditation: 0 (Invité)";
     }
+  }
+
+  // Recupere le contenu classifié auquel l'utilisateur connecté a droit.
+  // Supabase (via RLS) ne renvoie QUE les lignes autorisées : un visiteur
+  // sans clearance suffisant ne recevra jamais ce contenu, meme via le
+  // reseau / l'inspecteur.
+  async function refreshAccess() {
+    updateSessionDisplay();
+
+    let allowed = {};
+    if (currentSession) {
+      const { data, error } = await supabase.from("classified_content").select("*");
+      if (!error && data) {
+        data.forEach(row => { allowed[row.page_id] = row.html_content; });
+      }
+    }
+    if (currentSession) currentSession.allowedContent = allowed;
+
+    applyAccessToDOM();
   }
 
   // ==================== EVENEMENTS ====================
@@ -695,42 +690,54 @@
     loginModal.classList.add("open");
     document.getElementById("username").focus();
   });
-  
+
   document.getElementById("closeLogin").addEventListener("click", () => loginModal.classList.remove("open"));
   loginModal.addEventListener("click", (e) => { if (e.target === loginModal) loginModal.classList.remove("open"); });
 
-  document.getElementById("loginBtn").addEventListener("click", async () => {
+  loginBtn.addEventListener("click", async () => {
     const username = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value;
-    
-    let session = authenticateUser(username, password);
-    
-    if (!session) {
+
+    if (!username || !password) {
+      loginError.textContent = "Veuillez remplir tous les champs.";
       loginError.style.display = "block";
       return;
     }
-    
-    saveSession(session);
-    document.getElementById("password").value = "";
-    loginModal.classList.remove("open");
-    updateClassifiedVisibility();
-  });
 
-  document.getElementById("logoutBtn").addEventListener("click", () => {
-    clearSession();
+    loginBtn.disabled = true;
+    loginBtn.textContent = "Connexion...";
+
+    const session = await loginUser(username, password);
+
+    loginBtn.disabled = false;
+    loginBtn.textContent = "Valider la session";
+
+    if (!session) {
+      loginError.textContent = "Identifiants refusés par le registre ASIA.";
+      loginError.style.display = "block";
+      return;
+    }
+
+    currentSession = session;
+    loginError.style.display = "none";
     document.getElementById("username").value = "";
     document.getElementById("password").value = "";
-    loginError.style.display = "none";
-    updateClassifiedVisibility();
+    loginModal.classList.remove("open");
+    await refreshAccess();
   });
 
-  document.getElementById("password").addEventListener("keydown", (e) => { if (e.key === "Enter") document.getElementById("loginBtn").click(); });
+  document.getElementById("logoutBtn").addEventListener("click", async () => {
+    await supabase.auth.signOut();
+    currentSession = null;
+    await refreshAccess();
+  });
 
-  loadSession();
-  updateClassifiedVisibility();
-  
-  // Initialisation : masquer la bannière au chargement (page Accueil active par défaut)
+  document.getElementById("password").addEventListener("keydown", (e) => { if (e.key === "Enter") loginBtn.click(); });
+
+  // ==================== INITIALISATION ====================
   roleBanner.style.display = "none";
+  restoreSession().then(refreshAccess);
 </script>
 </body>
 </html>
+
