@@ -1,6 +1,6 @@
 const ASIA_ACCOUNTS = {
   users: [
-    { username: "asia67",        password: "archives67",   name: "Agent ASIA",        role: "Agent ASIA",              clearance: 2, permissions: "Archives publiques, procedures ASIA, acces niveau 2" },
+    { username: "asia67",        password: "archives67",    name: "Agent ASIA",         role: "Agent ASIA",              clearance: 2, permissions: "Archives publiques, procedures ASIA, acces niveau 2" },
     { username: "superviseur67", password: "secteurd67",    name: "Superviseur Site 67", role: "Superviseur Site 67",   clearance: 3, permissions: "Dossiers personnel, supervision consultations" },
     { username: "direction67",   password: "o5site67",      name: "Direction Site 67",  role: "Direction Site 67",      clearance: 4, permissions: "Acces complet archives classifiees" },
     { username: "archiviste",    password: "archives",      name: "Archiviste",         role: "Archiviste ASIA",        clearance: 3, permissions: "Gestion archives niveau 3" },
