@@ -470,7 +470,7 @@
         <thead>
           <tr>
             <th>Identifiant</th>
-            <th>Mot de passe</th>
+            <th>Nom affiché</th>
             <th>Rôle</th>
             <th>Accréditation</th>
             <th>Permissions</th>
@@ -491,63 +491,53 @@
 
 <div id="toast" class="toast"></div>
 
-<script src="accounts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   // ============================================================
-  //  COMPTES (definis dans accounts.js)
-  //  Voir accounts.js pour la liste complete et la note sur la securite.
+  //  CONNEXION SUPABASE
   // ============================================================
-  const SECURE_REGISTRY = ASIA_ACCOUNTS;
+  const SUPABASE_URL = "https://ywpsrdxgnihraodwuear.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3cHNyZHhnbmlocmFvZHd1ZWFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzMjU4NDQsImV4cCI6MjA5NjkwMTg0NH0.0zss_Kd6jErGWa1QkBoXY4ML7fMIwKJCWUSwPgExQFw";
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const EMAIL_DOMAIN = "@asia-site67.local";
 
   // ============================================================
-  //  GESTION DE LA SESSION (localStorage)
+  //  AUTHENTIFICATION ADMIN
   // ============================================================
-  function saveAdminSession(adminData) {
-    localStorage.setItem("asia_admin_auth", JSON.stringify({
-      authenticated: true,
-      admin: adminData,
-      timestamp: Date.now()
-    }));
-  }
-
-  function getAdminSession() {
-    try {
-      const saved = localStorage.getItem("asia_admin_auth");
-      if (!saved) return null;
-      const data = JSON.parse(saved);
-      if (data.authenticated && data.admin) {
-        if (Date.now() - data.timestamp < 24 * 60 * 60 * 1000) {
-          return data.admin;
-        }
-      }
-      return null;
-    } catch(e) {
+  async function fetchProfile(userId) {
+    const { data, error } = await supabase.from("profiles").select("*").eq("id", userId).single();
+    if (error) {
+      console.error("Erreur de chargement du profil:", error);
       return null;
     }
+    return data;
   }
 
-  function clearAdminSession() {
-    localStorage.removeItem("asia_admin_auth");
-  }
+  // Tente une connexion. Renvoie le profil SEULEMENT si is_admin === true,
+  // sinon deconnecte immediatement (un compte non-admin ne doit pas
+  // pouvoir rester authentifie sur cette page).
+  async function loginAdmin(username, password) {
+    const email = username.toLowerCase() + EMAIL_DOMAIN;
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error || !data.user) return null;
 
-  // ============================================================
-  //  AUTHENTIFICATION
-  // ============================================================
-  function verifyAdminCredentials(username, password) {
-    const admin = SECURE_REGISTRY.admins.find(
-      function(a) {
-        return a.username.toLowerCase() === username.toLowerCase() && a.password === password;
-      }
-    );
-    if (admin) {
-      return {
-        name: admin.name,
-        role: admin.role,
-        clearance: admin.clearance,
-        permissions: admin.permissions
-      };
+    const profile = await fetchProfile(data.user.id);
+    if (!profile || !profile.is_admin) {
+      await supabase.auth.signOut();
+      return null;
     }
-    return null;
+    return profile;
+  }
+
+  async function restoreAdminSession() {
+    const { data } = await supabase.auth.getSession();
+    if (!data.session) return null;
+    const profile = await fetchProfile(data.session.user.id);
+    if (!profile || !profile.is_admin) {
+      await supabase.auth.signOut();
+      return null;
+    }
+    return profile;
   }
 
   // ============================================================
@@ -562,7 +552,7 @@
     } else {
       toast.classList.remove("error");
     }
-    
+
     setTimeout(function() {
       toast.classList.remove("show");
     }, 3000);
@@ -570,7 +560,7 @@
 
   function escapeHtml(str) {
     if (!str) return "";
-    return str
+    return String(str)
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
@@ -578,49 +568,42 @@
       .replace(/'/g, "&#39;");
   }
 
-  function renderAccountsTable() {
+  // Charge la liste des comptes depuis Supabase. Grace a la RLS,
+  // seul un compte avec is_admin = true recoit toutes les lignes.
+  async function renderAccountsTable() {
     var tbody = document.getElementById("accountsTableBody");
-    
-    var allEntries = [];
-    
-    for (var i = 0; i < SECURE_REGISTRY.users.length; i++) {
-      var u = SECURE_REGISTRY.users[i];
-      allEntries.push({
-        username: u.username,
-        password: u.password,
-        role: u.role,
-        clearance: "Niveau " + u.clearance,
-        permissions: u.permissions
-      });
-    }
-    
-    for (var j = 0; j < SECURE_REGISTRY.admins.length; j++) {
-      var a = SECURE_REGISTRY.admins[j];
-      allEntries.push({
-        username: a.username,
-        password: a.password,
-        role: a.role,
-        clearance: a.clearance,
-        permissions: a.permissions
-      });
+
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .order("clearance", { ascending: false });
+
+    if (error || !data) {
+      tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>Erreur de chargement du registre.</td></tr>";
+      showToast("Erreur lors du chargement des comptes.", true);
+      return;
     }
 
-    document.getElementById("statUsers").textContent = SECURE_REGISTRY.users.length;
-    document.getElementById("statAdmins").textContent = SECURE_REGISTRY.admins.length;
-    document.getElementById("statTotal").textContent = allEntries.length;
+    var admins = data.filter(function(a) { return a.is_admin; });
+    var users = data.filter(function(a) { return !a.is_admin; });
+
+    document.getElementById("statUsers").textContent = users.length;
+    document.getElementById("statAdmins").textContent = admins.length;
+    document.getElementById("statTotal").textContent = data.length;
 
     var html = "";
-    for (var k = 0; k < allEntries.length; k++) {
-      var entry = allEntries[k];
+    for (var k = 0; k < data.length; k++) {
+      var entry = data[k];
+      var role = entry.is_admin ? "👑 " + escapeHtml(entry.role) : escapeHtml(entry.role);
       html += "<tr>";
       html += "<td><code>" + escapeHtml(entry.username) + "</code></td>";
-      html += "<td><code>" + escapeHtml(entry.password) + "</code></td>";
-      html += "<td>" + escapeHtml(entry.role) + "</td>";
-      html += "<td>" + escapeHtml(entry.clearance) + "</td>";
+      html += "<td>" + escapeHtml(entry.display_name) + "</td>";
+      html += "<td>" + role + "</td>";
+      html += "<td>Niveau " + escapeHtml(entry.clearance) + "</td>";
       html += "<td style=\"font-size: 12px;\">" + escapeHtml(entry.permissions) + "</td>";
       html += "</tr>";
     }
-    
+
     tbody.innerHTML = html;
   }
 
@@ -643,15 +626,15 @@
     adminError.style.display = "none";
   }
 
-  function showAdminPanel(admin) {
-    renderAccountsTable();
+  async function showAdminPanel(profile) {
     loginPanel.style.display = "none";
     adminPanel.style.display = "block";
-    document.getElementById("adminBadge").innerHTML = "👑 " + admin.name + " • " + admin.role;
-    showToast("Bienvenue " + admin.name + ", acces au registre autorise.", false);
+    document.getElementById("adminBadge").innerHTML = "👑 " + escapeHtml(profile.display_name) + " • " + escapeHtml(profile.role);
+    await renderAccountsTable();
+    showToast("Bienvenue " + profile.display_name + ", acces au registre autorise.", false);
   }
 
-  function handleAdminLogin() {
+  async function handleAdminLogin() {
     var username = adminUserInput.value.trim();
     var password = adminPasswordInput.value;
 
@@ -661,10 +644,16 @@
       return;
     }
 
-    var admin = verifyAdminCredentials(username, password);
-    
-    if (!admin) {
-      adminError.textContent = "⛔ ACCES REFUSE : Identifiant ou mot de passe incorrect.";
+    adminLoginBtn.disabled = true;
+    adminLoginBtn.textContent = "Vérification...";
+
+    var profile = await loginAdmin(username, password);
+
+    adminLoginBtn.disabled = false;
+    adminLoginBtn.textContent = "🔓 DÉVERROUILLER LE REGISTRE";
+
+    if (!profile) {
+      adminError.textContent = "⛔ ACCES REFUSE : Identifiant, mot de passe incorrect ou compte non habilité.";
       adminError.style.display = "block";
       adminPasswordInput.value = "";
       adminPasswordInput.focus();
@@ -672,12 +661,11 @@
       return;
     }
 
-    saveAdminSession(admin);
-    showAdminPanel(admin);
+    await showAdminPanel(profile);
   }
 
-  function handleLogout() {
-    clearAdminSession();
+  async function handleLogout() {
+    await supabase.auth.signOut();
     showLoginPanel();
     showToast("Session verrouillee.", false);
   }
@@ -696,12 +684,13 @@
     if (e.key === "Enter") adminPasswordInput.focus();
   });
 
-  var existingAdmin = getAdminSession();
-  if (existingAdmin) {
-    showAdminPanel(existingAdmin);
-  } else {
-    showLoginPanel();
-  }
+  restoreAdminSession().then(function(profile) {
+    if (profile) {
+      showAdminPanel(profile);
+    } else {
+      showLoginPanel();
+    }
+  });
 </script>
 </body>
 </html>
