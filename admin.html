@@ -498,14 +498,14 @@
   // ============================================================
   const SUPABASE_URL = "https://ywpsrdxgnihraodwuear.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl3cHNyZHhnbmlocmFvZHd1ZWFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzMjU4NDQsImV4cCI6MjA5NjkwMTg0NH0.0zss_Kd6jErGWa1QkBoXY4ML7fMIwKJCWUSwPgExQFw";
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   const EMAIL_DOMAIN = "@asia-site67.local";
 
   // ============================================================
   //  AUTHENTIFICATION ADMIN
   // ============================================================
   async function fetchProfile(userId) {
-    const { data, error } = await supabase.from("profiles").select("*").eq("id", userId).single();
+    const { data, error } = await supabaseClient.from("profiles").select("*").eq("id", userId).single();
     if (error) {
       console.error("Erreur de chargement du profil:", error);
       return null;
@@ -518,23 +518,23 @@
   // pouvoir rester authentifie sur cette page).
   async function loginAdmin(username, password) {
     const email = username.toLowerCase() + EMAIL_DOMAIN;
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
     if (error || !data.user) return null;
 
     const profile = await fetchProfile(data.user.id);
     if (!profile || !profile.is_admin) {
-      await supabase.auth.signOut();
+      await supabaseClient.auth.signOut();
       return null;
     }
     return profile;
   }
 
   async function restoreAdminSession() {
-    const { data } = await supabase.auth.getSession();
+    const { data } = await supabaseClient.auth.getSession();
     if (!data.session) return null;
     const profile = await fetchProfile(data.session.user.id);
     if (!profile || !profile.is_admin) {
-      await supabase.auth.signOut();
+      await supabaseClient.auth.signOut();
       return null;
     }
     return profile;
@@ -665,7 +665,7 @@
   }
 
   async function handleLogout() {
-    await supabase.auth.signOut();
+    await supabaseClient.auth.signOut();
     showLoginPanel();
     showToast("Session verrouillee.", false);
   }
@@ -694,3 +694,4 @@
 </script>
 </body>
 </html>
+
