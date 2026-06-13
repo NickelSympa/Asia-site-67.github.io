@@ -549,7 +549,6 @@
               <li><strong>Opérateurs WL</strong> — Accréditation Niveau 3+ (accès zone accréditée 4)</li>
               <li><strong>Archivistes WL</strong> — Accréditation Niveau 3+ (accès zone accréditée 3)</li>
               <li><strong>Agent de Sécurité des Archives</strong> — Accréditation Niveau 2 (Protection des périmètres)</li>
-              <li><strong>Stagiaire ASIA</strong> — Accréditation Niveau 1 (supervision obligatoire)</li>
             </ul>
             <div class="warning">La liste complète des permissions est consultable par les membres habilités Niveau 2. Toute tentative d'usurpation sera immédiatement signalée au Comité d'Éthique.</div>
           </div>
@@ -586,23 +585,11 @@
   </div>
 </div>
 
+<script src="accounts.js"></script>
 <script>
-  // ==================== COMPTES INTEGRES ====================
-  const ACCOUNTS = {
-    users: [
-      { username: "asia67", password: "archives67", name: "Agent ASIA", role: "Agent ASIA", clearance: 2, permissions: "Archives publiques, procédures ASIA" },
-      { username: "superviseur67", password: "secteurd67", name: "Superviseur Site 67", role: "Superviseur Site 67", clearance: 3, permissions: "Accès niveau 2, dossiers du personnel" },
-      { username: "direction67", password: "o5site67", name: "Direction Site 67", role: "Direction Site 67", clearance: 4, permissions: "Accès complet aux archives classifiées" },
-      { username: "archiviste", password: "archives", name: "Archiviste", role: "Archiviste ASIA", clearance: 3, permissions: "Archives classifiées niveau 3" },
-      { username: "agent_l4", password: "asia", name: "Agent Niveau 4", role: "Agent Spécial", clearance: 4, permissions: "Accès niveau 4" },
-      { username: "directeur", password: "asia", name: "Directeur ASIA", role: "Directeur", clearance: 5, permissions: "Accès total" },
-      { username: "chercheur", password: "labo", name: "Chercheur", role: "Chercheur", clearance: 3, permissions: "Laboratoires" },
-      { username: "asia_admin", password: "secure_admin", name: "Admin ASIA", role: "Administrateur", clearance: 5, permissions: "Accès total" }
-    ],
-    admins: [
-      { username: "admin67", password: "asia-admin-67", name: "Propriétaire ASIA", role: "Propriétaire du registre", clearance: "Administration", permissions: "Consultation de la page Administration, comptes, mots de passe, rôles et permissions." }
-    ]
-  };
+  // ==================== COMPTES (definis dans accounts.js) ====================
+  // Voir accounts.js pour la liste complete et la note sur la securite.
+  const ACCOUNTS = ASIA_ACCOUNTS;
 
   // ==================== GESTION SESSION ====================
   let currentSession = null;
